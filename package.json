@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
+    "git-commit-msg-linter": "^5.0.8",
     "sass": "^1.83.4",
     "vite": "^6.0.5"
   }

@@ -2,10 +2,25 @@
 export default {
   data() {
     return {
-      player: [],
+      player: [{
+        id: 1, name: 'Player 1', score: 40
+      }, {
+        id: 2, name: 'Player 2', score: 20
+      }, {
+        id: 3, name: 'Player 3', score: 30
+      }],
       cardList : [],
-      ranking: [],
+      status: 'loading',
+      attempts: 0
     }
+  },
+  computed: {
+    ranking() {
+      return this.player.sort((a, b) => b.score - a.score)
+    },
+  },
+  methods: {
+    handleCardFlip(event) {}
   }
 }
 </script>
@@ -17,13 +32,33 @@ export default {
     <div class="bl-board">
 
       <header class="bl-header">
-        Header
+
+        <aside class="display -performance">
+
+          <section class="display-section">
+            <div class="counter">
+              <div class="counter-time">[ mm:ss ]</div>
+            </div>
+          </section>
+
+          <section class="display-section">
+            <div class="progress">
+              <div class="progress-bar -circle">[ progress ]</div>
+            </div>
+          </section>
+
+        </aside>
+        
       </header>
       
       <aside class="canvas  card">
         <div class="card-container">
           <div class="card-grid">
-            <article class="card-grid__item" v-for="card in cardList">
+            <article 
+              class="card-grid__item" 
+              v-for="card in cardList"
+              @click="handleCardFlip"
+            >
 
               <figure class="card-grid__image -back">
                 <img :src="card.image.back" alt="Card Image">
@@ -38,14 +73,52 @@ export default {
         </div>
       </aside>
 
-      <main class="bl-content">
-        <header>
-          <h3>Jogo da memória</h3>
-        </header>
+      <main class="bl-content  content">
+        
+        <section class="content-section">
+          
+          <header class="content-section__header">
+            <hgroup>
+              <h1>Jogo da Memória</h1>
+              <h2>Bem Vindo Jogo da memória!</h2>
+            </hgroup>
+          </header>
+
+          <p class="content-section__description">
+            Prepare-se para desafiar sua memória com os lendários guerreiros de Dragon Ball!
+            Mostre que sua concentração está no nível de um Super Saiyajin.
+          </p>
+        </section>
+
+        <section class="content-section">
+
+          <div class="content-section__action">
+            <div class="button">
+              <i class="button-icon"></i>
+              <span class="button-label">Iniciar</span>
+            </div>
+          </div>
+
+        </section>
+
       </main>
 
       <footer class="bl-footer">
-        Footer
+        
+        <aside class="display -ranking ranking">
+          <div class="ranking-container">
+            <ul class="ranking-list">
+              <li 
+                class="ranking-list__item" 
+                v-for="player in ranking"
+              >
+                  <span>{{ player.name }} | </span>
+                  <span>{{ player.score }} pontos</span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
       </footer>
     </div>
 
@@ -99,23 +172,31 @@ export default {
 
   &-header,
   &-footer
+    overflow: hidden
+    position: absolute
     z-index: 999
 
   &-header
-    position: absolute
     left: 50%
     width: 40%
+    height: 8%
     margin-left: -20%
     color: rgba(255, 255, 255, 1)
+    border-radius: 0px 0px 100px 100px
  
   &-content
     flex-grow: 1
     align-content: center
+    max-width: 40%
 
   &-footer
+    right: -10px
+    bottom: -20px
     width: 70%
+    height: 10%
     margin-left: auto
     color: rgba(255, 255, 255, 1)
+    border-radius: 90px 60px 0 0
 
 .canvas
   
@@ -184,5 +265,52 @@ export default {
         &:hover
           transform: rotateY(180deg) scale(1.1)
 
+.content
+
+  &-section
+
+    &__action
+      width: 300px
+      margin: 0 auto
+
+.display
+
+  &.-performance,
+  &.-ranking
+    display: flex
+    height: 100%
+
+  &.-performance
+    position: relative
+    text-align: center
+    justify-content: space-around
+    align-items: center
+
+.ranking
+
+  &-container
+    width: 100%
+
+  &-list
+    list-style-type: none
+    display: flex
+    justify-content: space-around
+    width: 100%
+    color: rgba(255,255, 255, 1)
+
+.button
+  position: relative
+  display: flex
+  justify-content: center
+  padding: 1rem
+  border-radius: 33px
+  color: rgba(255,255, 255, 1) 
+  background-color: rgba(16, 11, 10, 1)
+  cursor: pointer
+
+  &-label
+    color: inherit
+    font-weight: 600
+    text-transform: uppercase
 
 </style>

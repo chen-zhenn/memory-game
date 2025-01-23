@@ -1,9 +1,28 @@
 {
-    "players": [{
-        "id": 1, "name": "Player 1", "email": "p1@teste.com", "score": 40
-      }, {
-        "id": 2, "name": "Player 2", "email": "p2@teste.com", "score": 20
-      }, {
-        "id": 3, "name": "Player 3", "email": "p3@teste.com", "score": 30
-      }] 
+  "players": [
+    {
+      "id": "1",
+      "name": "Player 1",
+      "email": "p1@teste.com",
+      "score": 40
+    },
+    {
+      "id": "2",
+      "name": "Player 2",
+      "email": "p2@teste.com",
+      "score": 20
+    },
+    {
+      "id": "3",
+      "name": "Player 3",
+      "email": "p3@teste.com",
+      "score": 30
+    },
+    {
+      "id": "ad79",
+      "name": "Player 4",
+      "email": "p4@teste.com",
+      "score": 0
+    }
+  ]
 }

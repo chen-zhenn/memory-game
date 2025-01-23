@@ -31,7 +31,8 @@ export default {
       players: [],
       cardList : [],
       status: 'waiting',
-      attempts: 0
+      attempts: 0,
+      score: 0,
     }
   },
   computed: {
@@ -48,6 +49,14 @@ export default {
     handleChangeStatusGame() {
       this.loadPlayersData()
       if(!!this.cardList.length) this.status = 'ready'
+    },
+    handleAttempCount() {
+      this.attempts = this.attempts + 1 
+    },
+    handleScoreCount() {
+      this.score = this.score + 1
+      if(this.score < 10) return
+      this.status = 'finished'
     },
     shuffleDataList(list) {
       const data = list
@@ -72,11 +81,11 @@ export default {
           const characterCards = await data.json()
           if(characterCards && !!characterCards?.items?.length) {
             const cardDataList = characterCards?.items
-              ?.map(character => 
+              ?.map((character, index) => 
                 ({ 
                   id: character?.id, 
                   title: character?.name, 
-                  image: { front: './assets/db-front.png', back: character?.image }, 
+                  image: { front: './assets/db-front.png', back: character?.image },
                 })
               )
               const duplicateDataList = [...cardDataList, ...cardDataList]
@@ -112,7 +121,12 @@ export default {
         </template>
 
         <template v-slot:canvas-grid>
-          <card-grid :cardList="cardList" v-if="viewGame" />
+          <card-grid 
+            :cardList="cardList" 
+            @attempt-count="handleAttempCount"
+            @score-count="handleScoreCount" 
+            v-if="viewGame" 
+          />
         </template>
       </Canvas>
 

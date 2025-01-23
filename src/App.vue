@@ -1,14 +1,14 @@
 <script>
+
+const { 
+  VITE_LOCAL_API,
+  VITE_PUBLIC_API, 
+} = import.meta.env
+
 export default {
   data() {
     return {
-      players: [{
-        name: 'Player 1', email: 'p1@teste.com', score: 40
-      }, {
-        name: 'Player 2', email: 'p2@teste.com', score: 20
-      }, {
-        name: 'Player 3', email: 'p3@teste.com', score: 30
-      }],
+      players: [],
       cardList : [],
       userEmail: '',
       userName: '',
@@ -44,6 +44,49 @@ export default {
         this.notValidName = true
       }
     },
+    shuffleDataList(list) {
+      const data = list
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+      return data
+    },
+    async loadPlayersData() {
+      try {
+          const data = await fetch(`${VITE_LOCAL_API}/players`)
+          const players = await data.json()
+          this.players = players
+        } catch (error) {
+          //
+          console.log('=> errors: ', error)
+        }
+    },
+    async loadCardsData() {
+      try {
+          const data  = await fetch(`${VITE_PUBLIC_API}/characters?limit=10`)
+          const characterCards = await data.json()
+          if(characterCards && !!characterCards?.items?.length) {
+            const cardDataList = characterCards?.items
+              ?.map(character => 
+                ({ 
+                  id: character?.id, 
+                  title: character?.name, 
+                  image: { front: './assets/db-front.png', back: character?.image }, 
+                })
+              )
+              const duplicateDataList = [...cardDataList, ...cardDataList]
+              const cardList = this.shuffleDataList(duplicateDataList)
+              this.cardList = cardList
+          }
+        } catch (error) {
+          //
+          console.log('=> errors: ', error)
+        }  
+    },
+  },
+  mounted() {
+    this.loadPlayersData()
+    this.loadCardsData()
   }
 }
 </script>

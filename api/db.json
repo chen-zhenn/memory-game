@@ -17,12 +17,6 @@
       "name": "Player 3",
       "email": "p3@teste.com",
       "score": 30
-    },
-    {
-      "id": "ad79",
-      "name": "Player 4",
-      "email": "p4@teste.com",
-      "score": 0
     }
   ]
 }

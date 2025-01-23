@@ -2,25 +2,48 @@
 export default {
   data() {
     return {
-      player: [{
-        id: 1, name: 'Player 1', score: 40
+      players: [{
+        name: 'Player 1', email: 'p1@teste.com', score: 40
       }, {
-        id: 2, name: 'Player 2', score: 20
+        name: 'Player 2', email: 'p2@teste.com', score: 20
       }, {
-        id: 3, name: 'Player 3', score: 30
+        name: 'Player 3', email: 'p3@teste.com', score: 30
       }],
       cardList : [],
-      status: 'loading',
+      userEmail: '',
+      userName: '',
+      notValidEmail: false,
+      notValidName: false,
+      status: 'waiting',
       attempts: 0
     }
   },
   computed: {
     ranking() {
-      return this.player.sort((a, b) => b.score - a.score)
+      return this.players
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3)
     },
+    viewGame() {
+      return this.status !== 'waiting' && this.status !== 'loading' ? true : false   
+    }
   },
   methods: {
-    handleCardFlip(event) {}
+    handleCardFlip(event) {},
+    handleSubmitUserData(event) {
+
+      if(this.userName && this.userEmail) {
+        this.players.push({ name: this.userName, score: 0 })
+        this.status = 'ready'
+        this.notValidEmail = false
+        this.notValidName = false
+        this.userEmail = ''
+        this.userName = ''
+      } else {
+        this.notValidEmail = true
+        this.notValidName = true
+      }
+    },
   }
 }
 </script>
@@ -33,7 +56,10 @@ export default {
 
       <header class="bl-header">
 
-        <aside class="display -performance">
+        <aside 
+          class="display -performance" 
+          v-if="viewGame"
+        >
 
           <section class="display-section">
             <div class="counter">
@@ -52,8 +78,82 @@ export default {
       </header>
       
       <aside class="canvas  card">
+
         <div class="card-container">
-          <div class="card-grid">
+
+          <div 
+            class="card-form" 
+            v-if="!viewGame"
+          >
+            <form class="form" @submit.prevent="handleSubmitUserData">
+
+              <fieldset class="form__group">
+                
+                <legend class="form__legend">
+                  Entre com seus dados antes de iniciar o jogo
+                </legend>
+                
+                <div class="form__control">
+                  <label 
+                  for="email" 
+                  class="form__label"
+                  >
+                    Digite seu email
+                  </label>
+                  <input 
+                    type="text" 
+                    name="email" 
+                    class="form__input"
+                    :class="{ invalid: notValidEmail }"
+                    placeholder="exemplo@email.com"
+                    v-model.trim="userEmail" 
+                  />
+                  <p 
+                    class="form__input_message" 
+                    v-if="notValidEmail"
+                  >
+                    Preencha o campos com email válido
+                  </p>
+                </div>
+
+                <div class="form__control">
+                  <label 
+                  for="name" 
+                  class="form__label"
+                  >
+                    Digite seu nome
+                  </label>
+                  <input 
+                    type="text" 
+                    name="name" 
+                    class="form__input"
+                    :class="{ invalid: notValidName }"
+                    placeholder="John Doe"
+                    v-model.trim="userName" 
+                  />
+
+                  <p 
+                      class="form__input_message" 
+                      v-if="notValidName"
+                  >
+                      Preencha o campo com nome válido
+                  </p>
+                </div>
+
+                <button class="form__button">
+                  Enviar
+                </button>
+
+              </fieldset>
+              
+            </form>
+          </div>
+          
+          <div 
+            class="card-grid" 
+            v-if="viewGame"
+          >
+
             <article 
               class="card-grid__item" 
               v-for="card in cardList"
@@ -70,7 +170,9 @@ export default {
 
             </article>
           </div>
+
         </div>
+
       </aside>
 
       <main class="bl-content  content">
@@ -80,7 +182,7 @@ export default {
           <header class="content-section__header">
             <hgroup>
               <h1>Jogo da Memória</h1>
-              <h2>Bem Vindo Jogo da memória!</h2>
+              <h2>Seja Bem Vindo!</h2>
             </hgroup>
           </header>
 
@@ -92,7 +194,10 @@ export default {
 
         <section class="content-section">
 
-          <div class="content-section__action">
+          <div 
+            class="content-section__action" 
+            v-if="viewGame"
+          >
             <div class="button">
               <i class="button-icon"></i>
               <span class="button-label">Iniciar</span>
@@ -105,7 +210,10 @@ export default {
 
       <footer class="bl-footer">
         
-        <aside class="display -ranking ranking">
+        <aside 
+          class="display -ranking ranking" 
+          v-if="viewGame"
+        >
           <div class="ranking-container">
             <ul class="ranking-list">
               <li 
@@ -224,8 +332,11 @@ export default {
     position: relative
     width: 100%
     height: 80%
-    padding: 1rem
+    // padding: 1rem
     z-index: 99
+
+  &-form
+    height: 100%
 
   &-grid
     display: grid
@@ -297,6 +408,7 @@ export default {
     justify-content: space-around
     width: 100%
     color: rgba(255,255, 255, 1)
+    transform: translate3d(0, 10px, 0)
 
 .button
   position: relative
@@ -312,5 +424,65 @@ export default {
     color: inherit
     font-weight: 600
     text-transform: uppercase
+
+.form
+  position: relative
+  display: flex
+  flex-flow: column
+  width: 80%
+  height: 100%
+  justify-content: center
+  transform: translate3d(50px, 0, 0) 
+
+  &__group
+    display: flex
+    flex-wrap: wrap
+    gap: 1rem
+    border: none
+
+  &__legend
+    margin-bottom: 3rem
+    font-size: 1.5rem
+    font-weight: 600
+    color: rgba(16, 11, 10, 1)
+
+  &__control
+    text-align: left
+    width: 100%
+
+  &__label
+    font-weight: 600
+    transform: translate3d(0, 10px, 0)
+
+  &__input
+    width: 100%
+    padding: .75rem
+    font-size: 1rem
+    border: none
+    outline: none
+
+    &.invalid
+      border: 2px solid rgba(252, 54, 72, 1)
+
+    &_message
+      margin: unset
+      font-weight: 600
+      font-size: .85rem
+      color: rgba(252, 54, 72, 1)
+
+  &__button
+    position: relative
+    display: flex
+    justify-content: center
+    width: 100%
+    padding: .75rem
+    border-radius: 33px
+    border: none
+    outline: none
+    font-weight: 600
+    text-transform: uppercase 
+    color: rgba(255,255, 255, 1)
+    background-color: rgba(16, 11, 10, 1)
+    cursor: pointer
 
 </style>

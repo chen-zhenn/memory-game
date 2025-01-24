@@ -33,6 +33,7 @@ export default {
       status: 'waiting',
       attempts: 0,
       score: 0,
+      time: 0,
     }
   },
   computed: {
@@ -42,13 +43,22 @@ export default {
         .slice(0, 3)
     },
     viewGame() {
-      return this.status !== 'waiting' && this.status !== 'loading' ? true : false   
+      return (this.status !== 'waiting' && this.status !== 'loading') ? true : false   
     }
   },
   methods: {
-    handleChangeStatusGame() {
+    handleChangeStatusGame(status) {
       this.loadPlayersData()
-      if(!!this.cardList.length) this.status = 'ready'
+      if(!this.cardList.length) {
+        this.status = 'aborted'
+        return
+      }
+
+      this.status = status
+
+    },
+    handleRoundTime(time) {
+      this.time = time
     },
     handleAttempCount() {
       this.attempts = this.attempts + 1 
@@ -98,6 +108,13 @@ export default {
         }  
     },
   },
+  watch: {
+    status(newStatus, oldStatus) {
+      if(newStatus === "finished") {
+        //
+      }
+    },
+  },
   mounted() {
     this.loadPlayersData()
     this.loadCardsData()
@@ -112,17 +129,23 @@ export default {
     <div class="bl-board">
 
       <Header>
-        <display-performance v-if="viewGame" />
+        <display-performance 
+          :game-status="status"
+          :score="score"
+          @round-time="handleRoundTime" 
+          v-if="viewGame" 
+        />
       </Header>
       
       <Canvas :form-view="!viewGame">
         <template v-slot:canvas-form>
-          <form-main @registered-player="handleChangeStatusGame" />
+          <form-main @registered-player="handleChangeStatusGame('ready')" />
         </template>
 
         <template v-slot:canvas-grid>
           <card-grid 
-            :cardList="cardList" 
+            :cardList="cardList"
+            :game-status="status" 
             @attempt-count="handleAttempCount"
             @score-count="handleScoreCount" 
             v-if="viewGame" 
@@ -130,10 +153,20 @@ export default {
         </template>
       </Canvas>
 
-      <Content :actionView="viewGame" />
+      <Content 
+        :actionView="viewGame"
+        :game-status="status" 
+        @start-game="handleChangeStatusGame"
+        @pause-game="handleChangeStatusGame"
+        @restart-game="handleChangeStatusGame"
+        @end-game="handleChangeStatusGame" 
+      />
 
       <Footer>
-          <display-ranking :ranking="ranking" v-if="viewGame" />
+          <display-ranking 
+            :ranking="ranking" 
+            v-if="viewGame" 
+          />
       </Footer>
 
     </div>

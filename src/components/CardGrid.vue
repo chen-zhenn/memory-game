@@ -6,13 +6,31 @@ export default {
       type: Array,
       required: false,
       default: [],
-    }
+    },
+    gameStatus: {
+        type: String,
+        required: true,
+        default: "ready",
+    },
   },
   data() {
     return {
+      notClickable: true,
       flippedCards: [],
-      foundPairIds: []
+      foundPairIds: [],
     }
+  },
+  watch: {
+    gameStatus(newStatus, oldStatus) {
+      
+      if(
+        newStatus !== "ready" && 
+        newStatus !== "paused" &&
+        newStatus !== "finished"
+      ) return this.notClickable = false
+
+      this.notClickable = true
+    },
   },
   methods: {
     handleCardFlip(event, card){
@@ -22,7 +40,11 @@ export default {
       const foundPair = this.foundPairIds.find(pair => pair.id === id)
       const cardFlipped = target.classList.contains('-flip') 
 
-      if (foundPair || cardFlipped) return
+      if (
+        this.notClickable ||
+        foundPair || 
+        cardFlipped
+      ) return
 
       target.classList.add('-flip')
 

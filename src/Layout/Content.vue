@@ -9,10 +9,40 @@ export default {
             type: Boolean,
             required: true,
             default: false,
-        }
+        },
+        gameStatus: {
+            type: String,
+            required: true,
+            default: "ready",
+        },
     },
     components: {
         Button, 
+    },
+    data() {
+        return {
+            buttonLabel: 'Iniciar'
+        }
+    },
+    watch: {
+        gameStatus(newStatus, oldStatus) {
+            if (newStatus === "ready") this.buttonLabel = "Jogar"
+            if (newStatus === "active") this.buttonLabel = "Pausar"
+            if (newStatus === "paused") this.buttonLabel = "Continuar"
+            if (newStatus === "finished") this.buttonLabel = "Reiniciar"
+        },
+    },
+    methods: {
+        handleControllerGame(){
+            if(this.gameStatus === "ready") 
+                this.$emit("start-game", "active")
+            if(this.gameStatus === "active") 
+                this.$emit("pause-game", "paused")
+            if(this.gameStatus === "paused") 
+                this.$emit("restart-game", "active")
+            if(this.gameStatus === "finished") 
+                this.$emit("end-game", "ready")
+        },
     },
 }
 
@@ -38,8 +68,16 @@ export default {
 
         <section class="content-section">
 
-            <div class="content-section__action" v-if="actionView">
-                <Button  label="Iniciar" />
+            <div 
+                class="content-section__action" 
+                v-if="actionView"
+            >
+                <Button 
+                    :label="buttonLabel"
+                    :warn="this.gameStatus === 'paused' || this.gameStatus === 'finished'" 
+                    @click="handleControllerGame" 
+                />
+                
             </div>
 
         </section>

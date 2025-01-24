@@ -35,6 +35,8 @@ export default {
       attempts: 0,
       score: 0,
       time: 0,
+      attemptsRatio: 0,
+      timeRatio: 0,
     }
   },
   computed: {
@@ -60,6 +62,7 @@ export default {
     },
     handleRoundTime(time) {
       this.time = time
+      this.handleTimesRatio()
     },
     handleAttempCount() {
       this.attempts = this.attempts + 1 
@@ -71,6 +74,27 @@ export default {
     },
     handlePlayerData(data) {
       this.playerData = data
+    },
+    handleAttemptsRatio() {
+      const totalAmountPairs = 10
+      const attemptsRatio = this.attempts / totalAmountPairs
+      this.attemptsRatio = attemptsRatio
+    },
+    handleTimesRatio() {
+      const totalAmountPairs = 10
+      const [minutes, seconds] = this.time
+        .split(':')
+        .map(Number)
+      const totalSeconds = (minutes * 60) + seconds
+      const timeRatio = totalSeconds / totalAmountPairs
+      this.timeRatio = timeRatio
+    },
+    handleScoreTotal() {
+      const PA = 0.7
+      const PT = 0.3
+      const scoreTotal = Math.floor(((this.attemptsRatio * PA) + (this.timeRatio * PT)) * 10)
+      this.score = scoreTotal 
+      this.updatePlayerData()
     },
     shuffleDataList(list) {
       const data = list
@@ -111,11 +135,38 @@ export default {
           console.log('=> errors: ', error)
         }  
     },
+    async updatePlayerData() {
+      if(!this.playerData) return 
+      try {
+        const response = await fetch(`${VITE_LOCAL_API}/players/${this.playerData.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                score: this.score,
+            })
+        })
+
+        if(response.ok || response.status === 200) {
+          this.loadPlayersData()
+        }
+      } catch (error) {
+        //
+      }
+
+    },
   },
   watch: {
+
+    timeRatio(newTimeRatio) {
+      if(!newTimeRatio || !this.attemptsRatio) return
+      this.handleScoreTotal()
+    },
+
     status(newStatus, oldStatus) {
       if(newStatus === "finished") {
-        //
+        this.handleAttemptsRatio()
       }
     },
   },

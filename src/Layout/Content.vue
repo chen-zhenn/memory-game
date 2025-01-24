@@ -21,15 +21,28 @@ export default {
     },
     data() {
         return {
-            buttonLabel: 'Iniciar'
+            title: 'Jogo da Memória',
+            description: 'Prepare-se para desafiar sua memória com os lendários guerreiros de Dragon Ball! Mostre que sua concentração está no nível de um Super Saiyajin.',
+            secondaryMessage: 'Seja Bem Vindo!',
+            buttonLabel: 'Jogar'
         }
     },
     watch: {
         gameStatus(newStatus, oldStatus) {
-            if (newStatus === "ready") this.buttonLabel = "Jogar"
+            if (newStatus === "ready") {
+                this.title = 'Jogo da Memória'
+                this.description = 'repare-se para desafiar sua memória com os lendários guerreiros de Dragon Ball! Mostre que sua concentração está no nível de um Super Saiyajin.'
+                this.secondaryMessage = 'Seja Bem Vindo!'
+                this.buttonLabel = "Jogar"
+            }
             if (newStatus === "active") this.buttonLabel = "Pausar"
             if (newStatus === "paused") this.buttonLabel = "Continuar"
-            if (newStatus === "finished") this.buttonLabel = "Reiniciar"
+            if (newStatus === "finished") {
+                this.title = 'Parabéns, você venceu!'
+                this.description = 'Você conseguiu memorizar todas as cartas. Quer tentar novamente e superar seu tempo anterior?'
+                this.secondaryMessage = 'Ótimo trabalho!'
+                this.buttonLabel = "Reiniciar"
+            }
         },
     },
     methods: {
@@ -55,14 +68,13 @@ export default {
 
             <header class="content-section__header">
                 <hgroup>
-                    <h1>Jogo da Memória</h1>
-                    <h2>Seja Bem Vindo!</h2>
+                    <h1>{{ title }}</h1>
+                    <h2>{{ secondaryMessage }}</h2>
                 </hgroup>
             </header>
 
             <p class="content-section__description">
-                Prepare-se para desafiar sua memória com os lendários guerreiros de Dragon Ball!
-                Mostre que sua concentração está no nível de um Super Saiyajin.
+                {{ description }}
             </p>
         </section>
 

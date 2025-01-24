@@ -30,6 +30,7 @@ export default {
     return {
       players: [],
       cardList : [],
+      playerData: null, 
       status: 'waiting',
       attempts: 0,
       score: 0,
@@ -67,6 +68,9 @@ export default {
       this.score = this.score + 1
       if(this.score < 10) return
       this.status = 'finished'
+    },
+    handlePlayerData(data) {
+      this.playerData = data
     },
     shuffleDataList(list) {
       const data = list
@@ -139,7 +143,10 @@ export default {
       
       <Canvas :form-view="!viewGame">
         <template v-slot:canvas-form>
-          <form-main @registered-player="handleChangeStatusGame('ready')" />
+          <form-main 
+            @player-data="handlePlayerData"
+            @player-registered="handleChangeStatusGame('ready')" 
+          />
         </template>
 
         <template v-slot:canvas-grid>

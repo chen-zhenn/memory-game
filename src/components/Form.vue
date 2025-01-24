@@ -39,11 +39,13 @@ export default {
             })
 
             if(response.ok || response.status === 201) {
+                const playerData = await response.json()
                 this.notValidEmail = false
                 this.notValidName = false
                 this.userEmail = ''
                 this.userName = ''
-                this.$emit("registered-player")
+                this.$emit("player-data", playerData)
+                this.$emit("player-registered")
             } 
             } catch (error) {
                 //

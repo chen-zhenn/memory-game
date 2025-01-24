@@ -2,9 +2,15 @@
     <img src="docs/preview-v1.0.png">
 </div>
 
-# :rocket: Jogo da memória
+# :video_game: Jogo da memória
 
-...
+Desafie sua memória e divirta-se com o Jogo da Memória! O objetivo é simples: encontre e combine os pares de cartas no menor tempo possível, usando o menor número de tentativas. Teste sua capacidade de concentração enquanto melhora seu desempenho a cada jogada.
+
+## :globe_with_meridians: __Demo Online__:
+
+Explore e teste a versão online, disponível em qualquer dispositivo com navegador.
+
+* :arrow_right:  [Clique aqui para jogar agora!](https://db-memorygame.netlify.app/)
 
 ## :electric_plug: Instalação
 
@@ -18,12 +24,18 @@ __1.__ Via **NVM** - Node Version Manager, consulte o [repositório](https://git
 __2.__ Via instalador (executável), consulte a [documentação](https://nodejs.org/en/download)
 
 
-### Como rodar o projeto
+### :rocket: Como rodar o projeto
+
+__1. Clone o repositório__
+
+```
+git clone git@github.com:chen-zhenn/memory-game.git
+```
 
 > **Nota**: 
 Certifique-se de estar no diretório raiz do projeto **:open_file_folder: /**
 
-__1. Habilite o arquivo de configuração para variáveis de ambiente__
+__2. Habilite o arquivo de configuração para variáveis de ambiente__
 
 ```
 cp .env.sample .env
@@ -32,25 +44,25 @@ cp .env.sample .env
 > __Nota__:
 Caso seu Shell não entenda o comando `cp`, faça a cópia manualmente.
 
-__2. Instale as dependências__
+__3. Instale as dependências__
 
 ```
 npm i
 ```
 
-__3. Levante a fake api__
+__4. Levante a fake api__
 
 ```
 npm run api
 ```
 
-__4. Levante aplicação Front-end__
+__5. Levante aplicação Front-end__
 
 ```
 npm run dev
 ```
 
-__5. Acesse seu navegador em__: [http://localhost:5173](http://localhost:5173)
+__6. Acesse seu navegador em__: [http://localhost:5173](http://localhost:5173)
 
 ### :boom: Boom!
 
@@ -66,6 +78,6 @@ Caso, por algum motivo a porta **5173** esteja sendo usada, verifique a porta se
 * __Vue__: Framework Front-end
 * __Sass__: Pre-processador CSS
 
-## :video_game: Como usar
+## :open_book: Como usar
 
 ...

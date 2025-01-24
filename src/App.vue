@@ -1,5 +1,7 @@
 <script>
 
+import { defineAsyncComponent } from 'vue'
+
 const { 
   VITE_LOCAL_API,
   VITE_PUBLIC_API, 
@@ -9,10 +11,6 @@ import Header from './Layout/Header.vue'
 import Content from './Layout/Content.vue'
 import Footer from './Layout/Footer.vue'
 
-import DisplayPerformance from './components/DisplayPerformance.vue'
-import DisplayRanking from './components/DisplayRanking.vue'
-import CardGrid from './components/CardGrid.vue'
-import FormMain from './components/Form.vue'
 import Canvas from './components/Canvas.vue'
 
 export default {
@@ -20,10 +18,10 @@ export default {
     Header,
     Content,
     Footer,
-    DisplayPerformance,
-    DisplayRanking,
-    CardGrid,
-    FormMain,
+    DisplayPerformance: defineAsyncComponent(() => import('./components/DisplayPerformance.vue')),
+    DisplayRanking: defineAsyncComponent(() => import('./components/DisplayRanking.vue')),
+    CardGrid: defineAsyncComponent(() => import('./components/CardGrid.vue')),
+    FormMain: defineAsyncComponent(() => import('./components/Form.vue')),
     Canvas,
   },
   data() {

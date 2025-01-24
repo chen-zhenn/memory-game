@@ -31,7 +31,7 @@ export default {
         gameStatus(newStatus, oldStatus) {
             if (newStatus === "ready") {
                 this.title = 'Jogo da Memória'
-                this.description = 'repare-se para desafiar sua memória com os lendários guerreiros de Dragon Ball! Mostre que sua concentração está no nível de um Super Saiyajin.'
+                this.description = 'Prepare-se para desafiar sua memória com os lendários guerreiros de Dragon Ball! Mostre que sua concentração está no nível de um Super Saiyajin.'
                 this.secondaryMessage = 'Seja Bem Vindo!'
                 this.buttonLabel = "Jogar"
             }

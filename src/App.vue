@@ -94,6 +94,13 @@ export default {
       this.score = scoreTotal 
       this.updatePlayerData()
     },
+    resetRoundData() {
+      this.attempts = 0
+      this.score = 0
+      this.time = 0
+      this.attemptsRatio = 0
+      this.timeRatio = 0
+    },
     shuffleDataList(list) {
       const data = list
         .map(value => ({ value, sort: Math.random() }))
@@ -148,6 +155,7 @@ export default {
 
         if(response.ok || response.status === 200) {
           this.loadPlayersData()
+          this.resetRoundData()
         }
       } catch (error) {
         //

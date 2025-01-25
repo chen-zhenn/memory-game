@@ -46,10 +46,17 @@ export default {
                 this.userName = ''
                 this.$emit("player-data", playerData)
                 this.$emit("player-registered")
-            } 
+            } else {
+                if (
+                    response.status === 500 && 
+                    response.type === 'cors'
+                ) {
+                    this.$emit("player-registered", 'ready', false)
+                }
+            }
             } catch (error) {
                 //
-                console.log('=> error: ', error)
+                this.$emit("player-registered", 'ready', false)
             }
 
         },

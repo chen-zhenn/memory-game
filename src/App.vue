@@ -48,8 +48,10 @@ export default {
     }
   },
   methods: {
-    handleChangeStatusGame(status) {
-      this.loadPlayersData()
+    handleChangeStatusGame(status, player) {
+
+      if(player) this.loadPlayersData()
+
       if(!this.cardList.length) {
         this.status = 'aborted'
         return
@@ -115,7 +117,6 @@ export default {
           this.players = players
         } catch (error) {
           //
-          console.log('=> errors: ', error)
         }
     },
     async loadCardsData() {
@@ -137,11 +138,12 @@ export default {
           }
         } catch (error) {
           //
-          console.log('=> errors: ', error)
         }  
     },
     async updatePlayerData() {
-      if(!this.playerData) return 
+      if(!this.playerData) 
+        return this.resetRoundData()
+
       try {
         const response = await fetch(`${VITE_LOCAL_API}/players/${this.playerData.id}`, {
             method: 'PATCH',
@@ -156,6 +158,9 @@ export default {
         if(response.ok || response.status === 200) {
           this.loadPlayersData()
           this.resetRoundData()
+        
+        } else {
+         //
         }
       } catch (error) {
         //
@@ -202,7 +207,7 @@ export default {
         <template v-slot:canvas-form>
           <form-main 
             @player-data="handlePlayerData"
-            @player-registered="handleChangeStatusGame('ready')" 
+            @player-registered="handleChangeStatusGame" 
           />
         </template>
 
